@@ -1,0 +1,251 @@
+video_id,comment_text
+eCjuoqUy8Is,"Thank you, one of the best video on ML Ops, ML production system design."
+eCjuoqUy8Is,"Hi,
+One query on DVC pipeline - what if data injection and cleaning pipeline is working in different tool, for example one company doing this in MS Fabric, in this case how would be flow ?"
+eCjuoqUy8Is,"Thanks, any book which you can suggest which covers this..."
+eCjuoqUy8Is,Sir MLOps ka full playlist upload kijiye plz
+eCjuoqUy8Is,I'm a Java developer but wants to switch from Java to MLOps ...is it possible or not sir
+eCjuoqUy8Is,❤❤❤
+eCjuoqUy8Is,Sir project ka link bhi daal diya karo...mein apka paid member hoo bhaut dhoondna padta hai ..air milta nahi hai kayi baar
+eCjuoqUy8Is,Why did u not use Jenkins?
+eCjuoqUy8Is,Sir when are you continuing this playlist again
+eCjuoqUy8Is,please please please please complete the playlist sir. please
+eCjuoqUy8Is,English??
+eCjuoqUy8Is,bro agli video remove kyu kr di🤦🏻
+eCjuoqUy8Is,"Sir, when will the remaining videos be released?"
+eCjuoqUy8Is,Waiting for other videos of this series
+eCjuoqUy8Is,legend
+eCjuoqUy8Is,Sir Please is playlist ko continue kariye  kaafi time se wait kar rhe hai 😢
+eCjuoqUy8Is,This is gold.
+eCjuoqUy8Is,nice video
+eCjuoqUy8Is,Sir ...mlops resume to kaaro plz
+eCjuoqUy8Is,Sir yeh jo model aap nay git par push kia hai is ka github par link mil sakta hai kya ? Please share this project github link
+eCjuoqUy8Is,Thank you very much.
+eCjuoqUy8Is,what if loadbalncer itself crashed then how to handle ?
+eCjuoqUy8Is,"please continue this playlist, it's been a while no videos are uploaded"
+eCjuoqUy8Is,next part upload sir
+eCjuoqUy8Is,can i deploy it using render ?
+eCjuoqUy8Is,Sir please continue this Playlist..🙏😢
+eCjuoqUy8Is,"One suggestion here instead of deploying to asg through cloud deploy , we can deploy the the docker image to k8s cluster , which is a best practice now a days"
+eCjuoqUy8Is,"Great introduction to MLOps 👏 The theory part is well covered, would love to see more practical hands-on examples in future videos!"
+eCjuoqUy8Is,sir please continue mlops playlist
+eCjuoqUy8Is,why you stopped this playlist ?
+eCjuoqUy8Is,Thank you
+eCjuoqUy8Is,"is the source code of discussed project in video , is not available freely?? 
+I cannot see github repo link??"
+eCjuoqUy8Is,Sir Please Upload More Videos related to MLOps
+eCjuoqUy8Is,Extremely fantastic explanation 👏👏👏
+eCjuoqUy8Is,"flask api,  web technologies of extension similar to web page.
+front end-> back end-> model
+mlflow-> for experimentation.
+1. word to numbers
+2. imbanlance data-> techniques
+3.algo? 
+
+
+drift???
+
+model works fine today, but may not work tomorrow
+
+
+automation using DVC pipeline:
+data ingestion->data cleaning->feature engineering->training
+
+params.yaml passes parameter from experiments
+DVC pipeline automatically triggers and re trainings with changes
+
+models: storage
+
+mlops models,  better than cloud storage
+
+after training ->staging(Testing model) -> if it  passes the test then production.
+
+how to test: 
+1. model loading correctly or not
+2. performance testing(at least 85%)
+3. or compare with existing model 
+
+model promotion: if model passes staging and goes to deployment
+
+
+
+dockerisation:
+flast api->docker image
+
+ECR(AWS) stored docker image
+
+EC2-> instance -> deployment"
+eCjuoqUy8Is,Sir bhool gye lgta hai mlops.  Har company expect kar rhi hai ki u know mlops
+eCjuoqUy8Is,Where are next videos of the playlist? Is it under paid plan?
+eCjuoqUy8Is,"Sir, please add new video for this as well 😊"
+eCjuoqUy8Is,"I’ve been following your MLOps playlist, and I must say it’s one of the best resources I’ve found. Your explanations are extremely clear, and the way you teach makes even complex topics easy to understand. However, I noticed that the uploads have stopped recently. I genuinely hope you’ll consider continuing the series — it’s incredibly helpful for learners like me. You’re a great teacher, and your content truly makes a difference. Looking forward to more videos from you"
+eCjuoqUy8Is,please continue MLOPs series
+eCjuoqUy8Is,Awesome 
+eCjuoqUy8Is,I think he is really planning something big for mlops in near future thats why he stopped this playlist
+eCjuoqUy8Is,"you are the best, I have learnt many things from Youtube related to multiple domains, and I can certainly say that you are one of the best in this"
+eCjuoqUy8Is,Sir mlops topic give other video
+eCjuoqUy8Is,"Amazing! Watched many videos but no one explained like you. Simple, sophisticated and digestible. Thank you Campus X."
+eCjuoqUy8Is,Complete one project
+eCjuoqUy8Is,MLops playlist or even a paid course on Udemy pls Nitish Sir
+eCjuoqUy8Is,This was a very life-changing video. Made me love MLOps More :D
+eCjuoqUy8Is,Sir  jaldi se Palylist of MLOps Cover karo please please
+eCjuoqUy8Is,Sir where does docker containerization come in all this process ?  Applied to only the production ready models ?
+eCjuoqUy8Is,"Video dekhne ke baad 2 hi chiz bol sakta hoon sir.
+
+Pehla plz continue this series also.
+
+Dusra Kya hi baat hain sir ...more than awesome best brain of the nation.🫡
+
+Sir mujhe lagta hain ek child ko jitni khusi ek story sun ke hoti hain.
+Same here."
+eCjuoqUy8Is,"Hi Nitish, could you please complete the playlist? It will help us gain a deeper understanding of MLOps."
+eCjuoqUy8Is,"Sir, Kindly please do the next consecutive videos which is much needed . Thank you"
+eCjuoqUy8Is,Thanks sir
+eCjuoqUy8Is,Please continue this series
+eCjuoqUy8Is,well explained thank you so much
+eCjuoqUy8Is,You are really GOD in simplifying things and teaching.
+eCjuoqUy8Is,Great waiting for the nxt video
+eCjuoqUy8Is,sir please continue this series..
+eCjuoqUy8Is,"This is very Nice, My question is as a DevOps enginner where to I feet in this flow ? what tools I should learn i norder to adapt it,
+e.g. backend APis and FE is not my work to do what else I need to learn to become MLOps engg ?"
+FVfiX4Hi08o,legit bro 🔥🔥
+FVfiX4Hi08o,Thank you brother!
+FVfiX4Hi08o,Do we have negative marks ?
+FVfiX4Hi08o,Are BCA Students Eligible
+FVfiX4Hi08o,Can 2027 batch students apply for this?
+FVfiX4Hi08o,Sir can you send me resources sheet
+FVfiX4Hi08o,Sir can u send me it
+FVfiX4Hi08o,Thank you!!
+FVfiX4Hi08o,Thank you
+FVfiX4Hi08o,"Can we apply for this on or after 10th march so that we can get little more time for prep??
+please answer as soon as possible
+or will there any risk for other city center allocation"
+FVfiX4Hi08o,bro some are even asking in thousands
+FVfiX4Hi08o,"Bro facing an error while registering.
+registered with an email, said duplicate candidate and if I try to login with same email then i am not receiving any OTP. what should i do?"
+FVfiX4Hi08o,When was a exam dates
+FVfiX4Hi08o,thank you
+FVfiX4Hi08o,nice Work
+FVfiX4Hi08o,"Bro, I got ninja offer in tcs on campus, am I eligible to apply for tcs nqt now?
+Because when I try to open next step portal it is not showing apply for drive option for me"
+FVfiX4Hi08o,Yes bro Google sheet is not opening
+FVfiX4Hi08o,mm
+FVfiX4Hi08o,Brother sheet open nhi ho rahi hai
+FVfiX4Hi08o,Thanks a lot sir.... It means a lot
+FVfiX4Hi08o,"Thank you so much for the help
+I liked the video, commented and even hyped the video as well
+As even youtubers with hundreds of thousands or millions subscribers selling their courses only, you genuinely tried to help us
+Thanks again"
+FVfiX4Hi08o,#RESPECT ++
+FVfiX4Hi08o,is this only for software roles or even for data analytics roles?
+FVfiX4Hi08o,Thank you bro 😊
+FVfiX4Hi08o,"What about LL ,stack and queue?do we have to prepare that for digital?I m from 2027 batch"
+FVfiX4Hi08o,"Hi I have applied for drive without updating  my application form there is no edit button. 
+This creates any problem"
+FVfiX4Hi08o,RESPECT ++
+FVfiX4Hi08o,Thank you soo much bro🥹
+FVfiX4Hi08o,"Bro, the google sheet is not opening"
+FVfiX4Hi08o,Thanks
+FVfiX4Hi08o,👍
+FVfiX4Hi08o,❤
+FVfiX4Hi08o,Good job Bro
+FVfiX4Hi08o,most helpful
+FVfiX4Hi08o,Appreciate your efforts in providing free resources with valuable content
+FVfiX4Hi08o,"During the registration steps, I was never given the option to enter or upload my educational details, CV, or photo. Despite that, the system marked my application as successful. I need the chance to edit or complete my details properly. Please let me know how I can fix this or get the editing option."
+FVfiX4Hi08o,"Hi I registered the tcs next step during my bca know iam doing mca I need to add my master details to apply nqt but there is no option in edit the application form 
+What can I do"
+FVfiX4Hi08o,tq
+FVfiX4Hi08o,Thank you brother :]
+FVfiX4Hi08o,thankss
+FVfiX4Hi08o,thank you for video
+FVfiX4Hi08o,broo i  have given hr discussion but not received any update after that
+FVfiX4Hi08o,Thank you so much.. ❤
+FVfiX4Hi08o,Thankyou for not charging !
+FVfiX4Hi08o,"showing registered but on 2023 ,I can see apply for drive but no application form now should I need to apply for drive or should I mail tcs to wipe out"
+FVfiX4Hi08o,If a BCA guy gives the exam and it went really well will they hire him on prime role please tell
+FVfiX4Hi08o,Link
+FVfiX4Hi08o,"Please clarify sir
+Do these job assessments have negative marking??"
+FVfiX4Hi08o,"if i given this free , can i able to give paid in  that month??"
+FVfiX4Hi08o,It's really helpful and meaningful...thank you for making time for us and giving such a nice and informative content
+FVfiX4Hi08o,Thank you so much bro
+FVfiX4Hi08o,"guys 1 doubt, if i give tcs nqt exam today after how many days will my interview be scheduled?"
+FVfiX4Hi08o,sir mera ak doubt hai kya clear karwa sakte hai mera cbse board tha class 10 mai mera 5.8 cgpa ayatha lekin as per cbse rule can i show best off 5 subject marks
+FVfiX4Hi08o,I has had 59.6% in 12 should i still prepare for tcs or not my brother is saying to round it up and register but i searched on internet that they verify documents after interview sometime and then u get rejected what should i do i have only got 1 interview as a 26 batch final year and my brother is saying there will be no hiring after march what should i even do
+FVfiX4Hi08o,"not just 40rs but 100 400s many people just try to sell there courses. what you are doing is really good work bro, please keep it doing that we'll support you"
+FVfiX4Hi08o,"thank you bhaiya , really  appreciate it...."
+FVfiX4Hi08o,tq so much sir this video was really helpful and  thank you so much for providing sheet for free of cost it will really help many students
+FVfiX4Hi08o,Thank You Bhaiyaa I really  appreciate it....
+FVfiX4Hi08o,I was rejected last month after giving an interview for Ninja role. am I eligible?
+FVfiX4Hi08o,Appreciate your efforts in providing free resources and valuable content and updates.
+lmjQ4ymSqnw,Aapke naam me hi Yash hai success To aapko success kaise nahi milti You will be the greatest batsman legend for sure 💯💯
+lmjQ4ymSqnw,Yashaswi jaiswal pe dabav banat hua laga muze 😅🤍🩶🖤
+lmjQ4ymSqnw,Bro he is my relative
+lmjQ4ymSqnw,My favorite player YB Jaiswal❤❤❤❤❤❤
+lmjQ4ymSqnw,Big fan of yashaswi jaiswal
+lmjQ4ymSqnw,Jasprit sir please
+lmjQ4ymSqnw,Be so good they can't ignore you 😊
+lmjQ4ymSqnw,Be it chess or life you have to have patience to win ❤
+lmjQ4ymSqnw,Next ruturaj please ❤
+lmjQ4ymSqnw,समझ गया भाई तुझे इंग्लिश आती है
+lmjQ4ymSqnw,"Jaiswal is an all format player. He has to place a price on his wicket. His average in white ball is very good, its just a matter of time. This years IPL will be a defining moment"
+lmjQ4ymSqnw,"His mindset>>>> dammm !! 
+His future is so bright and i believe that one day he'll gonna be one of the greatest cricketer in the world ❤️"
+lmjQ4ymSqnw,YJ.. what a guy.. lots of respect for you
+lmjQ4ymSqnw,Bhaiya virat sir ko invite kijiye
+lmjQ4ymSqnw,Bhaiya Rohit sir ko invite kijiye
+lmjQ4ymSqnw,"""Main sirf ball dekhke khelta hoon kon bowler hai usse farak nahi padta "" isiliye James Anderson,  Michelle Starc jese bowlers ko bhi chakke lagaya 🔥🔥🔥🔥🔥🔥"
+lmjQ4ymSqnw,":""THE BALL IS TOO SLOW"""
+lmjQ4ymSqnw,ye podcast india ka hai england ka😂
+lmjQ4ymSqnw,Future captain of Indian Cricket ❤️❤️❤️
+lmjQ4ymSqnw,Too much boring yaar kux maza nahi aaya Bhai bolna seekho yaar nothing interesting no story no fun no lessons even
+lmjQ4ymSqnw,*Me In time travelling for present to future and I seeJaiswal is a captain of team India and he wins a world cup* remember this 🚨
+lmjQ4ymSqnw,Bhai english ki jgah hindi bolta to mja aata ❤
+lmjQ4ymSqnw,Shubman gill all formate
+lmjQ4ymSqnw,Raj sir please invite virat kohli.
+lmjQ4ymSqnw,Bro shubman gill ko bhi bulalena plsss i request you.!
+lmjQ4ymSqnw,It's coming to slow 😂😂😂😂
+lmjQ4ymSqnw,Raj sir please invite to santosh nair sir
+lmjQ4ymSqnw,Virat Kohli ko Bulao ❤
+lmjQ4ymSqnw,Anderson jab bowling karta tha tab ye pani pori jese tatto mai tha
+lmjQ4ymSqnw,Rohit Sharma and Vaibhav Suryavanshi ko lekar aao
+lmjQ4ymSqnw,Bhai Hindi sohar Hindi mein bolo na yaar
+lmjQ4ymSqnw,ISPL Core committee members Bring them how and why made ISPL
+lmjQ4ymSqnw,It seems he had good schooling
+lmjQ4ymSqnw,Next guest Bhuvneshwar Kumar Indian bowler
+lmjQ4ymSqnw,"Maine.10.min.dekha.h.magar
+Is episod.to.english.me.hi.karalo.
+Bhai.magar.koi.batasakta.h.
+K.pura.episod.english.h.ya.maine
+Galat.kar.diya.podcast.nihi.
+Dekha.10.min.ke.bad.hindi.m.
+Bat.kari.ya.nahi❤😂😂"
+lmjQ4ymSqnw,"38:51  Jaiswal: Hoo hoo phir kabhi
+In response Raj bhaiya did not ask again. 
+ I really loved this part ❤❤"
+lmjQ4ymSqnw,"पॉडकास्ट हिंदी में हो रही है, इंग्लिश में समझ में नहीं आ रहा है, यह आपकी पॉडकास्ट शो हिंदी में है ना,.?"
+lmjQ4ymSqnw,"My advice to Yashasvi Jaishwal is that never forget what your first cricket coach and mentor Jwala Singh did for you... He turned you from a raw talent to a finished product... Please contribute in some way or the other in your coach's life... He was your legal guardian and did so much for you... And now you don't even have the courtesy to get him with you in any of your interviews. Please don't do this...If you respect your coach who was your gaurdian and primary provider of everything, you will win many more hearts and set a right example for this generation and the coming generations."
+lmjQ4ymSqnw,Elon Musk
+lmjQ4ymSqnw,One of my favourite young cricketer in Team India. Respect from Pakistan
+lmjQ4ymSqnw,"I am a big fan of his batting, but this isin’t organic, this is pure PR"
+lmjQ4ymSqnw,Please bring our favourite shubman gill on the podcast please
+lmjQ4ymSqnw,😊
+lmjQ4ymSqnw,@rajshamani Please create a podcast with Virat Kohli.
+lmjQ4ymSqnw,virat kolhi next
+lmjQ4ymSqnw,next parson MS  Dhoni sir
+lmjQ4ymSqnw,Hardik Pandya ko laiye podcast pe❤❤❤
+lmjQ4ymSqnw,Hardik Pandya fans like here
+lmjQ4ymSqnw,HP 33
+lmjQ4ymSqnw,Bhaiya Hardik Pandya ko laiye
+lmjQ4ymSqnw,He is future of Indian Cricket Team
+lmjQ4ymSqnw,"Raj this podcast is a very good one .
+Yashaswi is a very nice and focused boy .
+This podcast will help a lot to get encouragement in life ."
+lmjQ4ymSqnw,जिसको इंग्लिश आती हों वो ही ये पॉडकास्ट देखे
+lmjQ4ymSqnw,After his Century in Odi against South Africa ❤
+lmjQ4ymSqnw,Next podcast with David goggins
+lmjQ4ymSqnw,Bhai hindi me krle baat hmare upr se ja raha saara
+lmjQ4ymSqnw,Virat kohali ko koi bhi request kar ke lao sir ❤
+lmjQ4ymSqnw,Please do a podcast with shubhman gill ❤
+lmjQ4ymSqnw,Next podcast virat sir pls ❤
+lmjQ4ymSqnw,Krishna arora
