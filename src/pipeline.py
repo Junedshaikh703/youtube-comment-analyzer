@@ -16,7 +16,7 @@ from src.evaluation import (
 def run_pipeline():
 
     df = pd.read_csv(
-        "experiment_dataset_cleaned.csv"
+        "data/processed/experiment_dataset_cleaned.csv"
     )
 
     grouped = df.groupby("video_id")["comment_text"].apply(list)

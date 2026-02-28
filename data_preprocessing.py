@@ -1,7 +1,12 @@
 import pandas as pd
+import os
+
+# Paths
+RAW_PATH = os.path.join("data", "raw", "experiment_dataset.csv")
+PROCESSED_PATH = os.path.join("data", "processed", "experiment_dataset_cleaned.csv")
 
 # Load dataset
-df = pd.read_csv("experiment_dataset.csv")
+df = pd.read_csv(RAW_PATH)
 
 print("Before cleaning:", len(df))
 
@@ -19,7 +24,10 @@ df = df[df["comment_text"].str.len() > 2]
 
 print("After cleaning:", len(df))
 
-# Save cleaned dataset
-df.to_csv("experiment_dataset_cleaned.csv", index=False)
+# Ensure processed directory exists
+os.makedirs(os.path.dirname(PROCESSED_PATH), exist_ok=True)
 
-print("Cleaned dataset saved as experiment_dataset_cleaned.csv")
+# Save cleaned dataset
+df.to_csv(PROCESSED_PATH, index=False)
+
+print(f"Cleaned dataset saved as {PROCESSED_PATH}")

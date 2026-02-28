@@ -1,0 +1,46 @@
+schema: '2.0'
+stages:
+  fetch:
+    cmd: python data_fetching.py
+    deps:
+    - path: data_fetching.py
+      hash: md5
+      md5: 2f0bd7da7b84baa44845d49c932cde9f
+      size: 2092
+    outs:
+    - path: data/raw/experiment_dataset.csv
+      hash: md5
+      md5: e08fc7ddf4e94988268b63345db6d82e
+      size: 15811
+  preprocess:
+    cmd: python data_preprocessing.py
+    deps:
+    - path: data/raw/experiment_dataset.csv
+      hash: md5
+      md5: e08fc7ddf4e94988268b63345db6d82e
+      size: 15811
+    - path: data_preprocessing.py
+      hash: md5
+      md5: 7196fca3f4609fbbcfe94d556b8b3836
+      size: 860
+    outs:
+    - path: data/processed/experiment_dataset_cleaned.csv
+      hash: md5
+      md5: af85216be234f7b2132f5a8d179329ef
+      size: 15725
+  inference:
+    cmd: python main.py
+    deps:
+    - path: data/processed/experiment_dataset_cleaned.csv
+      hash: md5
+      md5: af85216be234f7b2132f5a8d179329ef
+      size: 15725
+    - path: main.py
+      hash: md5
+      md5: 570d653c03fdade68a060062dd3f123e
+      size: 55
+    - path: src
+      hash: md5
+      md5: b95044f1078bac8de69aea6cab2438a4.dir
+      size: 10172
+      nfiles: 9

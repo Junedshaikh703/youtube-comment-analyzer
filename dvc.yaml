@@ -1,7 +1,14 @@
 stages:
-  fetch:
-    cmd: \
   preprocess:
-    cmd: \
+    cmd: python data_preprocessing.py
+    deps:
+    - data/raw/experiment_dataset.csv
+    - data_preprocessing.py
+    outs:
+    - data/processed/experiment_dataset_cleaned.csv
   inference:
-    cmd: \
+    cmd: python main.py
+    deps:
+    - data/processed/experiment_dataset_cleaned.csv
+    - main.py
+    - src

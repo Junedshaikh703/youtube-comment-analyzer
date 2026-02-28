@@ -73,7 +73,7 @@ if __name__ == "__main__":
             })
 
     df = pd.DataFrame(all_data)
-    df.to_csv("experiment_dataset.csv", index=False)
+    df.to_csv("data/raw/experiment_dataset.csv", index=False)
 
     print("\nDataset saved as experiment_dataset.csv")
     print(f"Total comments fetched: {len(df)}")
