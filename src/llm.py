@@ -3,15 +3,12 @@ from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
+# PROMPTS
+# ======================
 
-def generate_summary(comments):
-
-    comments_text = "\n".join(comments)
-
-    prompt = f"""
+SUMMARY_PROMPT_TEMPLATE = """
 The following are YouTube comments for a video.
 
 Write a concise but comprehensive paragraph summary (3–7 sentences) in English.
@@ -26,44 +23,38 @@ Do not include percentages or numbers.
 Keep the tone neutral and professional.
 
 Comments:
-{comments_text}
+{comments}
 """
 
+REPLY_PROMPT_TEMPLATE = """
+Generate a short (maximum 20 words), friendly and professional reply 
+to the following YouTube comment.
+
+Do not add unnecessary details.
+Do not include emojis unless appropriate.
+
+Comment:
+{comment}
+"""
+
+
+
+def generate_summary(comments , model , temperature):
+
+    comments_text = "\n".join(comments)
+
+    prompt = SUMMARY_PROMPT_TEMPLATE.format(comments=comments_text)
+
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=model,
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
+        temperature=temperature
     )
 
     return response.choices[0].message.content
 
 
-# def classify_comment(comment):
-
-#     prompt = f"""
-# Classify the following YouTube comment into one of the categories:
-
-# POSITIVE
-# NEGATIVE
-# QUESTION
-# NEUTRAL
-
-# Return only one word.
-
-
-# Comment: {comment}
-# """
-
-#     response = client.chat.completions.create(
-#         model="llama-3.3-70b-versatile",
-#         messages=[{"role": "user", "content": prompt}],
-#         temperature=0
-#     )
-
-#     return response.choices[0].message.content.strip()
-
-
-def classify_comments_batch(comments):
+def classify_comments_batch(comments , model):
 
     formatted_comments = "\n".join(
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
@@ -87,7 +78,7 @@ Comments:
 """
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=model,
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )
@@ -106,24 +97,14 @@ Comments:
 
 
 
-def generate_reply(comment):
+def generate_reply(comment , model , temperature):
 
-    prompt = f"""
-Generate a short (maximum 20 words), friendly and professional reply 
-to the following YouTube comment.
-
-Do not add unnecessary details.
-Do not include emojis unless appropriate.
-
-
-Comment:
-{comment}
-"""
+    prompt = REPLY_PROMPT_TEMPLATE.format(comment=comment)
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=model,
         messages=[{"role": "user", "content": prompt}],
-        temperature=0
+        temperature=temperature
     )
 
     return response.choices[0].message.content.strip()

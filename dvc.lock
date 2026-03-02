@@ -41,6 +41,12 @@ stages:
       size: 55
     - path: src
       hash: md5
-      md5: 8a87f02dc6b326121c55701f45837efa.dir
-      size: 12914
+      md5: 1679385bad871d57446602b513cfdea8.dir
+      size: 16771
       nfiles: 9
+    params:
+      params.yaml:
+        llm.batch_size: 30
+        llm.model_name: llama-3.3-70b-versatile
+        llm.reply_temperature: 0
+        llm.summary_temperature: 0

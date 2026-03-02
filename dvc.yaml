@@ -12,3 +12,8 @@ stages:
     - data/processed/experiment_dataset_cleaned.csv
     - main.py
     - src
+    params:
+    - llm.model_name
+    - llm.batch_size
+    - llm.summary_temperature
+    - llm.reply_temperature
