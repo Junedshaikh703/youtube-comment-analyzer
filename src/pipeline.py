@@ -3,7 +3,7 @@ import numpy as np
 
 from src.llm import (
     generate_summary,
-    classify_comment,
+    classify_comments_batch,
     generate_reply
 )
 
@@ -11,6 +11,15 @@ from src.evaluation import (
     compute_summary_similarity,
     compute_reply_similarity
 )
+
+BATCH_SIZE = 30
+
+# CREATE BATCHES
+def create_batches(items, batch_size):
+    batches = []
+    for i in range(0, len(items), batch_size):
+        batches.append(items[i:i + batch_size])
+    return batches
 
 
 def run_pipeline():
@@ -35,16 +44,24 @@ def run_pipeline():
 
         print("Summary Similarity:", sim)
 
-        # REPLIES
-        for comment in comments:
+        
+        # Batch classification (ONE API CALL)
+        all_labels = []
 
-            label = classify_comment(comment)
+        batches = create_batches(comments, BATCH_SIZE)
 
-            if label in ["QUESTION"]:
+        for batch in batches:
+            labels = classify_comments_batch(batch)
+            all_labels.extend(labels)
 
+        print(len(comments), len(all_labels))
+
+        for comment, label in zip(comments, all_labels):
+
+            if label in ["QUESTION", "NEGATIVE"]:
                 reply = generate_reply(comment)
-                r_sim = compute_reply_similarity(comment, reply)
 
+                r_sim = compute_reply_similarity(comment, reply)
                 reply_scores.append(r_sim)
 
     print("\nAverage Summary Similarity:", np.mean(summary_scores))
