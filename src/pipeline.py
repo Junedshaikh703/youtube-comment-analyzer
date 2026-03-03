@@ -88,6 +88,11 @@ def run_pipeline():
 
             print("Summary Similarity:", sim)
 
+            mlflow.log_text(
+            summary,
+            f"summaries/{video_id}.txt"
+            )
+
             
             # Batch classification (ONE API CALL)
             all_labels = []
