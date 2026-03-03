@@ -85,7 +85,7 @@ def run_pipeline():
             print(f"\nProcessing video: {video_id}")
 
             # SUMMARY
-            summary = generate_summary(comments , model=MODEL , temperature=SUMMARY_TEMP)
+            summary = generate_summary(comments[:45] , model=MODEL , temperature=SUMMARY_TEMP)
 
 
             cosine_score = compute_summary_similarity(comments, summary)
