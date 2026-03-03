@@ -30,7 +30,8 @@ from src.llm import (
 
 from src.evaluation import (
     compute_summary_similarity,
-    compute_reply_similarity
+    compute_reply_similarity,
+    compute_structure_score
 )
 
 
@@ -76,6 +77,8 @@ def run_pipeline():
 
         summary_scores = []
         reply_scores = []
+        cosine_scores = []
+        structure_scores = []
 
         for video_id, comments in grouped.items():
 
@@ -83,10 +86,21 @@ def run_pipeline():
 
             # SUMMARY
             summary = generate_summary(comments , model=MODEL , temperature=SUMMARY_TEMP)
-            sim = compute_summary_similarity(comments, summary)
-            summary_scores.append(sim)
 
-            print("Summary Similarity:", sim)
+
+            cosine_score = compute_summary_similarity(comments, summary)
+            structure_score = compute_structure_score(summary)
+
+            final_score = (0.8 * cosine_score) + (0.2 * structure_score)
+
+            summary_scores.append(final_score)
+
+            # Optional: keep tracking individual metrics too
+            cosine_scores.append(cosine_score)
+            structure_scores.append(structure_score)
+            
+
+            print("Summary Similarity:", cosine_score)
 
             mlflow.log_text(
             summary,
@@ -96,6 +110,7 @@ def run_pipeline():
             
             # Batch classification (ONE API CALL)
             all_labels = []
+
 
             batches = create_batches(comments, BATCH_SIZE)
 
@@ -113,14 +128,19 @@ def run_pipeline():
                     r_sim = compute_reply_similarity(comment, reply)
                     reply_scores.append(r_sim)
 
-        avg_summary_similarity = float(np.mean(summary_scores))
+        # Compute averages
+        avg_cosine = float(np.mean(cosine_scores))
+        avg_structure = float(np.mean(structure_scores))
+        avg_final = float(np.mean(summary_scores))
 
-        print("\nAverage Summary Similarity:", avg_summary_similarity)
+        print("\nAverage Cosine Similarity:", avg_cosine)
+        print("Average Structure Score:", avg_structure)
+        print("Average Final Score:", avg_final)
 
-        mlflow.log_metric(
-            "avg_summary_similarity",
-            avg_summary_similarity
-        )
+        # Log all metrics
+        mlflow.log_metric("avg_cosine_similarity", avg_cosine)
+        mlflow.log_metric("avg_structure_score", avg_structure)
+        mlflow.log_metric("avg_final_score", avg_final)
 
         if reply_scores:
             avg_reply_similarity = float(np.mean(reply_scores))
