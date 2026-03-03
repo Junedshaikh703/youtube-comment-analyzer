@@ -8,23 +8,22 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # PROMPTS
 # ======================
 
-SUMMARY_PROMPT_TEMPLATE = """
-You are analyzing YouTube audience feedback.
+SUMMARY_PROMPT_TEMPLATE = """The following are YouTube comments for a video.
 
-Write a coherent paragraph summary (4–6 sentences) describing:
+Write a concise but comprehensive paragraph summary (3–7 sentences) in English.
+The summary should clearly reflect:
+- The overall sentiment of the comments
+- The main themes of praise (if any)
+- The main complaints or concerns (if any)
+- Any common questions or recurring topics
 
-• the main discussion themes
-• common viewer opinions
-• recurring concerns or problems
-• overall audience sentiment
-
-Focus on patterns across comments rather than individual examples.
 Do not invent information.
-Use clear and neutral professional language.
+Do not include percentages or numbers.
+Keep the tone neutral and professional.
 
 Comments:
-{comments}
-"""
+{comments}"""
+
 
 REPLY_PROMPT_TEMPLATE = """
 Generate a short (maximum 20 words), friendly and professional reply 
