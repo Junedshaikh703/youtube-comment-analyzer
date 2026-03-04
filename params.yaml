@@ -1,6 +1,7 @@
 llm:
-  model_name: llama-3.1-8b
+  model_name: llama-3.3-70b-versatile
   batch_size: 30
 
   summary_temperature: 0
   reply_temperature: 0
+  
