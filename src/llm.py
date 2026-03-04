@@ -9,20 +9,23 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # ======================
 
 SUMMARY_PROMPT_TEMPLATE = """
-You are analyzing YouTube comments to provide feedback to the creator.
+You are analyzing YouTube comments for a video.
 
-Write a concise and well-structured paragraph summary (3–5 sentences) that:
+Write a concise paragraph summary (4–6 sentences).
 
-• Describes the overall sentiment
-• Highlights major praise or appreciation themes
-• Mentions recurring concerns or requests
-• Notes frequently asked questions
+Your summary should capture:
 
-Include one or two representative phrases from the comments when helpful,
-but avoid excessive quoting or repetition.
-Stay close to the wording used in the comments while maintaining clarity.
+• The overall sentiment of viewers
+• The most common praises
+• The most frequent complaints or issues
+• The main questions viewers are asking
 
+Focus only on themes that appear repeatedly.
+Avoid mentioning rare or isolated comments.
+
+Write clearly and professionally.
 Do not invent information.
+Do not include numbers or percentages.
 
 Comments:
 {comments}
