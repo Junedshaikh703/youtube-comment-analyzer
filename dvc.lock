@@ -41,8 +41,8 @@ stages:
       size: 55
     - path: src
       hash: md5
-      md5: f8cf2c02f51d5be633d4d25af57adec3.dir
-      size: 20615
+      md5: 520ffc04c7c96471085428fcf39c045b.dir
+      size: 20488
       nfiles: 9
     params:
       params.yaml:

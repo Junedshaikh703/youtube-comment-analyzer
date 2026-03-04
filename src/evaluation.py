@@ -33,6 +33,35 @@ def compute_structure_score(summary: str) -> float:
     return max(structure_score, 0)
 
 
+def compute_reply_constraint_score(reply: str) -> float:
+    """
+    Score reply quality based on simple constraints.
+    Returns value between 0 and 1.
+    """
+
+    if not reply or reply.strip() == "":
+        return 0.0
+
+    score = 1.0
+
+    # word length constraint
+    word_count = len(reply.split())
+    if word_count > 20:
+        score -= 0.3
+
+    # emoji check
+    emoji_chars = ["🔥","😂","😍","👍","💯","❤️"]
+    if any(e in reply for e in emoji_chars):
+        score -= 0.1
+
+    # repetition check (very simple)
+    words = reply.lower().split()
+    if len(words) != len(set(words)):
+        score -= 0.1
+
+    return max(score, 0)
+
+
 def compute_summary_similarity(comments, summary):
 
     comment_embeddings = embedding_model.encode(comments)

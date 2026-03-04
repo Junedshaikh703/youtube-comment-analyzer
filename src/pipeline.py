@@ -31,7 +31,8 @@ from src.llm import (
 from src.evaluation import (
     compute_summary_similarity,
     compute_reply_similarity,
-    compute_structure_score
+    compute_structure_score,
+    compute_reply_constraint_score
 )
 
 
@@ -79,33 +80,35 @@ def run_pipeline():
         reply_scores = []
         cosine_scores = []
         structure_scores = []
+        reply_cosine_scores = []
+        reply_constraint_scores = []
 
         for video_id, comments in grouped.items():
 
-            print(f"\nProcessing video: {video_id}")
+            # print(f"\nProcessing video: {video_id}")
 
-            # SUMMARY
-            summary = generate_summary(comments[:45] , model=MODEL , temperature=SUMMARY_TEMP)
+            # # SUMMARY
+            # summary = generate_summary(comments[:45] , model=MODEL , temperature=SUMMARY_TEMP)
 
 
-            cosine_score = compute_summary_similarity(comments, summary)
-            structure_score = compute_structure_score(summary)
+            # cosine_score = compute_summary_similarity(comments, summary)
+            # structure_score = compute_structure_score(summary)
 
-            final_score = (0.8 * cosine_score) + (0.2 * structure_score)
+            # final_score = (0.8 * cosine_score) + (0.2 * structure_score)
 
-            summary_scores.append(final_score)
+            # summary_scores.append(final_score)
 
             # Optional: keep tracking individual metrics too
-            cosine_scores.append(cosine_score)
-            structure_scores.append(structure_score)
+            # cosine_scores.append(cosine_score)
+            # structure_scores.append(structure_score)
             
 
-            print("Summary Similarity:", cosine_score)
+            # print("Summary Similarity:", cosine_score)
 
-            mlflow.log_text(
-            summary,
-            f"summaries/{video_id}.txt"
-            )
+            # mlflow.log_text(
+            # summary,
+            # f"summaries/{video_id}.txt"
+            # )
 
             
             # Batch classification (ONE API CALL)
@@ -125,29 +128,43 @@ def run_pipeline():
                 if label in ["QUESTION", "NEGATIVE"]:
                     reply = generate_reply(comment , model=MODEL , temperature=REPLY_TEMP)
 
-                    r_sim = compute_reply_similarity(comment, reply)
-                    reply_scores.append(r_sim)
+                    cosine_reply = compute_reply_similarity(comment, reply)
+                    constraint_score = compute_reply_constraint_score(reply)
+                    final_reply_score = (0.7 * cosine_reply) + (0.3 * constraint_score)
 
-        # Compute averages
-        avg_cosine = float(np.mean(cosine_scores))
-        avg_structure = float(np.mean(structure_scores))
-        avg_final = float(np.mean(summary_scores))
+                    reply_scores.append(final_reply_score)
+                    reply_cosine_scores.append(cosine_reply)
+                    reply_constraint_scores.append(constraint_score)
 
-        print("\nAverage Cosine Similarity:", avg_cosine)
-        print("Average Structure Score:", avg_structure)
-        print("Average Final Score:", avg_final)
+                    if len(reply_scores) <= 5:
+                        mlflow.log_text(
+                            f"COMMENT: {comment}\nREPLY: {reply}",
+                            f"reply_samples/{video_id}_{len(reply_scores)}.txt"
+    )
 
-        # Log all metrics
-        mlflow.log_metric("avg_cosine_similarity", avg_cosine)
-        mlflow.log_metric("avg_structure_score", avg_structure)
-        mlflow.log_metric("avg_final_score", avg_final)
+        # # Compute averages
+        # avg_cosine = float(np.mean(cosine_scores))
+        # avg_structure = float(np.mean(structure_scores))
+        # avg_final = float(np.mean(summary_scores))
+
+        # print("\nAverage Cosine Similarity:", avg_cosine)
+        # print("Average Structure Score:", avg_structure)
+        # print("Average Final Score:", avg_final)
+
+        # # Log all metrics
+        # mlflow.log_metric("avg_cosine_similarity", avg_cosine)
+        # mlflow.log_metric("avg_structure_score", avg_structure)
+        # mlflow.log_metric("avg_final_score", avg_final)
 
         if reply_scores:
-            avg_reply_similarity = float(np.mean(reply_scores))
+            avg_reply_cosine = float(np.mean(reply_cosine_scores))
+            avg_reply_constraint = float(np.mean(reply_constraint_scores))
+            avg_reply_final = float(np.mean(reply_scores))
 
-            print("Average Reply Similarity:", avg_reply_similarity)
+            mlflow.log_metric("avg_reply_cosine", avg_reply_cosine)
+            mlflow.log_metric("avg_reply_constraint", avg_reply_constraint)
+            mlflow.log_metric("avg_reply_final", avg_reply_final)
 
-            mlflow.log_metric(
-                "avg_reply_similarity",
-                avg_reply_similarity
-            )
+            print("\nAverage Reply Cosine Similarity:", avg_reply_cosine)
+            print("Average Reply Constraint Score:", avg_reply_constraint)      
+            print("Average Reply Final Score:", avg_reply_final)
