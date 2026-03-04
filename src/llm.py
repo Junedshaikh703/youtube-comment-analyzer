@@ -101,11 +101,31 @@ Comments:
     return labels
 
 
+def generate_replies_batch(comments, model, temperature):
 
+    formatted_comments = "\n".join(
+        [f"{i+1}. {c}" for i, c in enumerate(comments)]
+    )
 
-def generate_reply(comment , model , temperature):
+    prompt = f"""
+You are helping a YouTube creator reply to comments.
 
-    prompt = REPLY_PROMPT_TEMPLATE.format(comment=comment)
+Generate a short reply (maximum 20 words) for each comment.
+
+Rules:
+- Be polite and professional
+- Directly address the comment
+- Do not add unnecessary details
+
+Return replies in this format:
+
+1|reply text
+2|reply text
+3|reply text
+
+Comments:
+{formatted_comments}
+"""
 
     response = client.chat.completions.create(
         model=model,
@@ -113,4 +133,26 @@ def generate_reply(comment , model , temperature):
         temperature=temperature
     )
 
-    return response.choices[0].message.content.strip()
+    lines = response.choices[0].message.content.strip().split("\n")
+
+    replies = []
+
+    for line in lines:
+        parts = line.split("|")
+        if len(parts) == 2:
+            replies.append(parts[1].strip())
+
+    return replies
+
+
+# def generate_reply(comment , model , temperature):
+
+#     prompt = REPLY_PROMPT_TEMPLATE.format(comment=comment)
+
+#     response = client.chat.completions.create(
+#         model=model,
+#         messages=[{"role": "user", "content": prompt}],
+#         temperature=temperature
+#     )
+
+#     return response.choices[0].message.content.strip()

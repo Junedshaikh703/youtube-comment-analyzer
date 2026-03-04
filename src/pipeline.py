@@ -23,7 +23,7 @@ REPLY_TEMP = params["llm"]["reply_temperature"]
 from src.llm import (
     generate_summary,
     classify_comments_batch,
-    generate_reply,
+    generate_replies_batch,
     SUMMARY_PROMPT_TEMPLATE,
     REPLY_PROMPT_TEMPLATE
 )
@@ -123,13 +123,24 @@ def run_pipeline():
 
             print(len(comments), len(all_labels))
 
-            for comment, label in zip(comments, all_labels):
+            # Collect comments needing replies
+            target_comments = []
+            target_indices = []
 
+            for idx, (comment, label) in enumerate(zip(comments, all_labels)):
                 if label in ["QUESTION", "NEGATIVE"]:
-                    reply = generate_reply(comment , model=MODEL , temperature=REPLY_TEMP)
+                    target_comments.append(comment)
+                    target_indices.append(idx)
+
+            # Generate replies in batch
+            if target_comments:
+                replies = generate_replies_batch(target_comments, MODEL, REPLY_TEMP)
+
+                for comment, reply in zip(target_comments, replies):
 
                     cosine_reply = compute_reply_similarity(comment, reply)
                     constraint_score = compute_reply_constraint_score(reply)
+
                     final_reply_score = (0.7 * cosine_reply) + (0.3 * constraint_score)
 
                     reply_scores.append(final_reply_score)
@@ -140,7 +151,9 @@ def run_pipeline():
                         mlflow.log_text(
                             f"COMMENT: {comment}\nREPLY: {reply}",
                             f"reply_samples/{video_id}_{len(reply_scores)}.txt"
-    )
+                        )
+        
+                
 
         # # Compute averages
         # avg_cosine = float(np.mean(cosine_scores))
