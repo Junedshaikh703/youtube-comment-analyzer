@@ -33,14 +33,28 @@ Comments:
 
 
 REPLY_PROMPT_TEMPLATE = """
-Generate a short (maximum 20 words), friendly and professional reply 
-to the following YouTube comment.
+You are a YouTube creator replying to viewer comments.
 
-Do not add unnecessary details.
-Do not include emojis unless appropriate.
+Generate a short reply (maximum 20 words) for EACH comment.
 
-Comment:
-{comment}
+Guidelines:
+- Be polite and professional
+- Directly address the viewer’s comment
+- If the viewer asks a question, provide a short helpful answer
+- If the viewer reports a problem, acknowledge it respectfully
+- Avoid unnecessary details
+
+Return replies STRICTLY in this format:
+
+1|reply text
+2|reply text
+3|reply text
+
+Do not include emojis.
+Do not add explanations.
+
+Comments:
+{comments}
 """
 
 
@@ -107,25 +121,7 @@ def generate_replies_batch(comments, model, temperature):
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
     )
 
-    prompt = f"""
-You are helping a YouTube creator reply to comments.
-
-Generate a short reply (maximum 20 words) for each comment.
-
-Rules:
-- Be polite and professional
-- Directly address the comment
-- Do not add unnecessary details
-
-Return replies in this format:
-
-1|reply text
-2|reply text
-3|reply text
-
-Comments:
-{formatted_comments}
-"""
+    prompt = REPLY_PROMPT_TEMPLATE.format(comments=formatted_comments)
 
     response = client.chat.completions.create(
         model=model,
@@ -145,14 +141,4 @@ Comments:
     return replies
 
 
-# def generate_reply(comment , model , temperature):
 
-#     prompt = REPLY_PROMPT_TEMPLATE.format(comment=comment)
-
-#     response = client.chat.completions.create(
-#         model=model,
-#         messages=[{"role": "user", "content": prompt}],
-#         temperature=temperature
-#     )
-
-#     return response.choices[0].message.content.strip()
