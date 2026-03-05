@@ -14,6 +14,7 @@ with open("params.yaml") as f:
     params = yaml.safe_load(f)
 
 MODEL = params["llm"]["model_name"]
+PROVIDER = params["llm"]["provider"]
 BATCH_SIZE = params["llm"]["batch_size"]
 SUMMARY_TEMP = params["llm"]["summary_temperature"]
 REPLY_TEMP = params["llm"]["reply_temperature"]
@@ -46,10 +47,10 @@ def create_batches(items, batch_size):
 
 def run_pipeline():
 
-    mlflow.set_experiment("Reply_Prompt Experimentation")
+    mlflow.set_experiment("Models Experimentation")
 
 
-    run_name = f"reply_prompt_test_{MODEL}_bs{BATCH_SIZE}"
+    run_name = f"model_test_{MODEL}"
     with mlflow.start_run(run_name=run_name):
 
         mlflow.log_param("model", MODEL)
@@ -57,7 +58,7 @@ def run_pipeline():
         mlflow.log_param("summary_temperature", SUMMARY_TEMP)
         mlflow.log_param("reply_temperature", REPLY_TEMP)
 
-        mlflow.set_tag("experiment_phase", "prompt_experimentation")
+        mlflow.set_tag("experiment_phase", "model_experimentation")
         mlflow.set_tag("task", "summary_and_reply")
 
         mlflow.log_text(
@@ -85,30 +86,30 @@ def run_pipeline():
 
         for video_id, comments in grouped.items():
 
-            # print(f"\nProcessing video: {video_id}")
+            print(f"\nProcessing video: {video_id}")
 
-            # # SUMMARY
-            # summary = generate_summary(comments[:45] , model=MODEL , temperature=SUMMARY_TEMP)
+            # SUMMARY
+            summary = generate_summary(comments=comments[:45] , model=MODEL , provider=PROVIDER, temperature=SUMMARY_TEMP)
 
 
-            # cosine_score = compute_summary_similarity(comments, summary)
-            # structure_score = compute_structure_score(summary)
+            cosine_score = compute_summary_similarity(comments, summary)
+            structure_score = compute_structure_score(summary)
 
-            # final_score = (0.8 * cosine_score) + (0.2 * structure_score)
+            final_score = (0.8 * cosine_score) + (0.2 * structure_score)
 
-            # summary_scores.append(final_score)
+            summary_scores.append(final_score)
 
             # Optional: keep tracking individual metrics too
-            # cosine_scores.append(cosine_score)
-            # structure_scores.append(structure_score)
+            cosine_scores.append(cosine_score)
+            structure_scores.append(structure_score)
             
 
-            # print("Summary Similarity:", cosine_score)
+            print("Summary Similarity:", cosine_score)
 
-            # mlflow.log_text(
-            # summary,
-            # f"summaries/{video_id}.txt"
-            # )
+            mlflow.log_text(
+            summary,
+            f"summaries/{video_id}.txt"
+            )
 
             
             # Batch classification (ONE API CALL)
@@ -118,7 +119,7 @@ def run_pipeline():
             batches = create_batches(comments, BATCH_SIZE)
 
             for batch in batches:
-                labels = classify_comments_batch(batch , model=MODEL)
+                labels = classify_comments_batch(comments=batch , model=MODEL , provider=PROVIDER)
                 all_labels.extend(labels)
 
             print(len(comments), len(all_labels))
@@ -134,7 +135,7 @@ def run_pipeline():
 
             # Generate replies in batch
             if target_comments:
-                replies = generate_replies_batch(target_comments, MODEL, REPLY_TEMP)
+                replies = generate_replies_batch(comments=target_comments, model=MODEL,provider=PROVIDER, temperature=REPLY_TEMP)
 
                 for comment, reply in zip(target_comments, replies):
 
@@ -155,27 +156,27 @@ def run_pipeline():
         
                 
 
-        # # Compute averages
-        # avg_cosine = float(np.mean(cosine_scores))
-        # avg_structure = float(np.mean(structure_scores))
-        # avg_final = float(np.mean(summary_scores))
+        # Compute averages
+        avg_cosine = float(np.mean(cosine_scores))
+        avg_structure = float(np.mean(structure_scores))
+        avg_final = float(np.mean(summary_scores))
 
-        # print("\nAverage Cosine Similarity:", avg_cosine)
-        # print("Average Structure Score:", avg_structure)
-        # print("Average Final Score:", avg_final)
+        print("\nAverage Cosine Similarity:", avg_cosine)
+        print("Average Structure Score:", avg_structure)
+        print("Average Final Score:", avg_final)
 
-        # # Log all metrics
+        # Log all metrics
         # mlflow.log_metric("avg_cosine_similarity", avg_cosine)
         # mlflow.log_metric("avg_structure_score", avg_structure)
-        # mlflow.log_metric("avg_final_score", avg_final)
+        mlflow.log_metric("avg_final_score", avg_final)
 
         if reply_scores:
             avg_reply_cosine = float(np.mean(reply_cosine_scores))
             avg_reply_constraint = float(np.mean(reply_constraint_scores))
             avg_reply_final = float(np.mean(reply_scores))
 
-            mlflow.log_metric("avg_reply_cosine", avg_reply_cosine)
-            mlflow.log_metric("avg_reply_constraint", avg_reply_constraint)
+            # mlflow.log_metric("avg_reply_cosine", avg_reply_cosine)
+            # mlflow.log_metric("avg_reply_constraint", avg_reply_constraint)
             mlflow.log_metric("avg_reply_final", avg_reply_final)
 
             print("\nAverage Reply Cosine Similarity:", avg_reply_cosine)

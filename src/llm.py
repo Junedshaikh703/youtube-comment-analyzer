@@ -1,9 +1,21 @@
 import os
 from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+openai_client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+deepseek_client = OpenAI(
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com"
+)
+
 
 # PROMPTS
 # ======================
@@ -59,23 +71,47 @@ Comments:
 """
 
 
+def call_llm(prompt, model, temperature, provider):
 
-def generate_summary(comments , model , temperature):
+    if provider == "groq":
+
+        response = groq_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature
+        )
+
+    elif provider == "openai":
+
+        response = openai_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature
+        )
+
+    elif provider == "deepseek":
+
+        response = deepseek_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature
+        )
+
+    return response.choices[0].message.content
+
+
+def generate_summary(comments , model , provider, temperature):
 
     comments_text = "\n".join(comments)
 
     prompt = SUMMARY_PROMPT_TEMPLATE.format(comments=comments_text)
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
+    response = call_llm(prompt, model=model, temperature=temperature, provider=provider)
 
-    return response.choices[0].message.content
+    return response
 
 
-def classify_comments_batch(comments , model):
+def classify_comments_batch(comments , model, provider):
 
     formatted_comments = "\n".join(
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
@@ -98,13 +134,9 @@ Comments:
 {formatted_comments}
 """
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0
-    )
+    response = call_llm(prompt, model=model, temperature=0, provider=provider)
 
-    lines = response.choices[0].message.content.strip().split("\n")
+    lines = response.strip().split("\n")
 
     labels = []
 
@@ -116,7 +148,7 @@ Comments:
     return labels
 
 
-def generate_replies_batch(comments, model, temperature):
+def generate_replies_batch(comments, model, provider, temperature):
 
     formatted_comments = "\n".join(
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
@@ -124,13 +156,9 @@ def generate_replies_batch(comments, model, temperature):
 
     prompt = REPLY_PROMPT_TEMPLATE.format(comments=formatted_comments)
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
+    response = call_llm(prompt, model=model, temperature=temperature, provider=provider)
 
-    lines = response.choices[0].message.content.strip().split("\n")
+    lines = response.strip().split("\n")
 
     replies = []
 
