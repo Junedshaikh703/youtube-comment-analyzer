@@ -46,10 +46,10 @@ def create_batches(items, batch_size):
 
 def run_pipeline():
 
-    mlflow.set_experiment("Prompt Experimentation")
+    mlflow.set_experiment("Reply_Prompt Experimentation")
 
 
-    run_name = f"prompt_test_{MODEL}_bs{BATCH_SIZE}"
+    run_name = f"reply_prompt_test_{MODEL}_bs{BATCH_SIZE}"
     with mlflow.start_run(run_name=run_name):
 
         mlflow.log_param("model", MODEL)
