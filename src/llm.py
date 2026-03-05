@@ -33,16 +33,17 @@ Comments:
 
 
 REPLY_PROMPT_TEMPLATE = """
-You are a YouTube creator replying to viewer comments.
+You are the creator of a YouTube video responding to viewer comments.
 
 Generate a short reply (maximum 20 words) for EACH comment.
 
-Guidelines:
-- Be polite and professional
-- Directly address the viewer’s comment
-- If the viewer asks a question, provide a short helpful answer
-- If the viewer reports a problem, acknowledge it respectfully
-- Avoid unnecessary details
+Your reply should:
+- Sound friendly and supportive
+- Address the viewer’s comment directly
+- Provide brief guidance if the viewer asks a question
+- Politely acknowledge issues or concerns
+
+Keep replies concise and natural.
 
 Return replies STRICTLY in this format:
 
