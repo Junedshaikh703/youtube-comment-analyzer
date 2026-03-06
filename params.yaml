@@ -1,7 +1,6 @@
 llm:
   provider: groq
-  model_name: llama-3.3-70b-versatile
-
+  model_name: qwen/qwen3-32b
   batch_size: 30
   summary_temperature: 0
   reply_temperature: 0
