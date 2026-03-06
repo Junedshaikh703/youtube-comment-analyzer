@@ -17,3 +17,9 @@ stages:
     - llm.batch_size
     - llm.summary_temperature
     - llm.reply_temperature
+  select_best_model:
+    cmd: python src/select_best_model.py
+    deps:
+    - src/select_best_model.py
+    outs:
+    - best_model_config.json
