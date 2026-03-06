@@ -1,6 +1,0 @@
-{
-    "provider": "groq",
-    "model_name": "openai/gpt-oss-120b",
-    "summary_temperature": 0,
-    "reply_temperature": 0
-}
