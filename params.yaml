@@ -1,6 +1,6 @@
 llm:
   provider: groq
-  model_name: qwen/qwen3-32b
+  model_name: openai/gpt-oss-120b
   batch_size: 30
   summary_temperature: 0
   reply_temperature: 0

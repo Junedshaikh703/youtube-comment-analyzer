@@ -47,6 +47,6 @@ stages:
     params:
       params.yaml:
         llm.batch_size: 30
-        llm.model_name: llama-3.3-70b-versatile
+        llm.model_name: qwen/qwen3-32b
         llm.reply_temperature: 0
         llm.summary_temperature: 0
