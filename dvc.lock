@@ -50,3 +50,15 @@ stages:
         llm.model_name: openai/gpt-oss-120b
         llm.reply_temperature: 0
         llm.summary_temperature: 0
+  select_best_model:
+    cmd: python src/select_best_model.py
+    deps:
+    - path: src/select_best_model.py
+      hash: md5
+      md5: d4ae64845364f738cb94bda312917d74
+      size: 1427
+    outs:
+    - path: best_model_config.json
+      hash: md5
+      md5: 01534394318e6deb199e150c2cf00f3c
+      size: 130
