@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 from src.inference.inference_service import analyze_comments
+from src.utils.youtube_fetcher import extract_video_id, fetch_comments  
 
 
 app = Flask(__name__)
@@ -10,20 +11,22 @@ app = Flask(__name__)
 def home():
 
     summary = None
-    replies = None
+    pairs = None
+    comments = None
 
     if request.method == "POST":
 
-        comments_text = request.form["comments"]
-
-        comments = comments_text.split("\n")
-
-        summary, replies = analyze_comments(comments)
+        video_url = request.form["video_url"]
+        video_id = extract_video_id(video_url)
+        comments = fetch_comments(video_id) if video_id else None
+        
+        if comments:
+            summary, pairs = analyze_comments(comments)
 
     return render_template(
         "index.html",
         summary=summary,
-        replies=replies
+        pairs=pairs
     )
 
 

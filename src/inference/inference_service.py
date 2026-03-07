@@ -51,4 +51,9 @@ def analyze_comments(comments):
             temperature=0
         )
 
-    return summary, replies
+
+    # create comment-reply pairs
+    pairs = list(zip(target_comments, replies))
+
+
+    return summary, pairs

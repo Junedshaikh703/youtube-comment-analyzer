@@ -71,13 +71,13 @@ button:hover{
 
 <form method="POST">
 
-<p>Enter comments (one per line)</p>
+<p>Paste YouTube Video URL</p>
 
-<textarea name="comments"></textarea>
+<input type="text" name="video_url" style="width:100%;padding:10px">
 
 <br><br>
 
-<button type="submit">Analyze</button>
+<button type="submit">Analyze Video Comments</button>
 
 </form>
 
@@ -92,12 +92,24 @@ button:hover{
 {{ summary }}
 </div>
 
-<h3>Replies</h3>
+<h3>Questions & Replies</h3>
 
-{% for r in replies %}
+{% for comment, reply in pairs %}
+
+<div style="margin-bottom:15px;">
+
+<b>Comment:</b>
 
 <div class="reply-box">
-{{ r }}
+{{ comment }}
+</div>
+
+<b>Reply:</b>
+
+<div class="reply-box">
+{{ reply }}
+</div>
+
 </div>
 
 {% endfor %}
