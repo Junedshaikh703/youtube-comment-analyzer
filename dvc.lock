@@ -41,9 +41,9 @@ stages:
       size: 64
     - path: src
       hash: md5
-      md5: 029fa8568a1347d5a91fbe7726de9c59.dir
-      size: 51938
-      nfiles: 18
+      md5: f8268084f92d0fb3219d65d06ca836ad.dir
+      size: 53572
+      nfiles: 19
     params:
       params.yaml:
         llm.batch_size: 30
@@ -51,14 +51,18 @@ stages:
         llm.reply_temperature: 0
         llm.summary_temperature: 0
   select_best_model:
-    cmd: python src/select_best_model.py
+    cmd: python src/pipeline/select_best_model.py
     deps:
-    - path: src/select_best_model.py
+    - path: mlflow.db
       hash: md5
-      md5: d4ae64845364f738cb94bda312917d74
-      size: 1427
+      md5: ddaa08795d3f556200541fb98618dc34
+      size: 626688
+    - path: src/pipeline/select_best_model.py
+      hash: md5
+      md5: 989a60fdef5bf5ab48e9e14bc6bff032
+      size: 1435
     outs:
-    - path: best_model_config.json
+    - path: configs/best_model_config.json
       hash: md5
       md5: 01534394318e6deb199e150c2cf00f3c
       size: 130
