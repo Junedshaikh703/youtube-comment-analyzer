@@ -1,34 +1,39 @@
-from flask import Flask, render_template, request
+from fastapi import FastAPI, Form
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
 
 from src.inference.inference_service import analyze_comments
-from src.utils.youtube_fetcher import extract_video_id, fetch_comments  
+from src.utils.youtube_fetcher import extract_video_id, fetch_comments
+
+app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 
-app = Flask(__name__)
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
 
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-
-    summary = None
-    pairs = None
-    comments = None
-
-    if request.method == "POST":
-
-        video_url = request.form["video_url"]
-        video_id = extract_video_id(video_url)
-        comments = fetch_comments(video_id) if video_id else None
-        
-        if comments:
-            summary, pairs = analyze_comments(comments)
-
-    return render_template(
+    return templates.TemplateResponse(
         "index.html",
-        summary=summary,
-        pairs=pairs
+        {"request": request, "summary": None, "pairs": None}
     )
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.post("/", response_class=HTMLResponse)
+def analyze(request: Request, video_url: str = Form(...)):
+
+    video_id = extract_video_id(video_url)
+
+    comments = fetch_comments(video_id)
+
+    summary, pairs = analyze_comments(comments)
+
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "summary": summary,
+            "pairs": pairs
+        }
+    )
