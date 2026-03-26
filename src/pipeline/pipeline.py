@@ -21,7 +21,7 @@ REPLY_TEMP = params["llm"]["reply_temperature"]
 
 
 
-from src.llm import (
+from src.services.llm import (
     generate_summary,
     classify_comments_batch,
     generate_replies_batch,
@@ -29,7 +29,7 @@ from src.llm import (
     REPLY_PROMPT_TEMPLATE
 )
 
-from src.evaluation import (
+from src.pipeline.evaluation import (
     compute_summary_similarity,
     compute_reply_similarity,
     compute_structure_score,

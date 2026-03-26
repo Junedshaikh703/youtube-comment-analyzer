@@ -1,6 +1,6 @@
 import json
 
-from src.llm import (
+from src.services.llm import (
     generate_summary,
     classify_comments_batch,
     generate_replies_batch

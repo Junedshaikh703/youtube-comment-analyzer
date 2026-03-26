@@ -13,13 +13,13 @@ stages:
       md5: e08fc7ddf4e94988268b63345db6d82e
       size: 15811
   preprocess:
-    cmd: python data_preprocessing.py
+    cmd: python src/pipeline/data_preprocessing.py
     deps:
     - path: data/raw/experiment_dataset.csv
       hash: md5
       md5: e08fc7ddf4e94988268b63345db6d82e
       size: 15811
-    - path: data_preprocessing.py
+    - path: src/pipeline/data_preprocessing.py
       hash: md5
       md5: 7196fca3f4609fbbcfe94d556b8b3836
       size: 860
@@ -37,13 +37,13 @@ stages:
       size: 15725
     - path: main.py
       hash: md5
-      md5: 570d653c03fdade68a060062dd3f123e
-      size: 55
+      md5: b98a263587667b1f54cd087bc17ef79a
+      size: 64
     - path: src
       hash: md5
-      md5: 382a08668503fa7c074296045f028ba6.dir
-      size: 29508
-      nfiles: 10
+      md5: 029fa8568a1347d5a91fbe7726de9c59.dir
+      size: 51938
+      nfiles: 18
     params:
       params.yaml:
         llm.batch_size: 30

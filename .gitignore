@@ -8,3 +8,4 @@ __pycache__/
 .idea/
 *.log
 /best_model_config.json
+venv/

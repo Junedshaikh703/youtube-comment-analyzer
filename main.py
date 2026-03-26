@@ -1,3 +1,3 @@
-from src.pipeline import run_pipeline
+from src.pipeline.pipeline import run_pipeline
 
 run_pipeline()

@@ -50,7 +50,7 @@ best_config = {
     "reply_temperature": 0
 }
 
-with open("best_model_config.json", "w") as f:
+with open("configs/best_model_config.json", "w") as f:
     json.dump(best_config, f, indent=4)
 
 print("Best model selected:", best_model)

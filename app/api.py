@@ -4,11 +4,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
 
 from src.inference.inference_service import analyze_comments
-from src.utils.youtube_fetcher import extract_video_id, fetch_comments
+from src.services.youtube_fetcher import extract_video_id, fetch_comments
 
 app = FastAPI()
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/templates")
 
 
 @app.get("/", response_class=HTMLResponse)
