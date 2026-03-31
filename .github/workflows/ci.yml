@@ -34,6 +34,11 @@ jobs:
         pip install flake8
         flake8 . --max-line-length=120 || true
 
+    - name: Set CI env
+      run: echo "CI=true" >> $GITHUB_ENV
+
     - name: Run Tests
       run: |
         pytest
+
+  

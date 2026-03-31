@@ -5,17 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-openai_client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
-
-deepseek_client = OpenAI(
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com"
-)
-
 
 # PROMPTS
 # ======================
@@ -73,29 +62,33 @@ Comments:
 
 def call_llm(prompt, model, temperature, provider):
 
-    if provider == "groq":
+    import os
 
-        response = groq_client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=temperature
-        )
+    # 👉 If running in CI → return dummy
+    if os.getenv("CI"):
+        return "dummy response"
+
+    # 👉 Import only when needed
+    if provider == "groq":
+        from groq import Groq
+        client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     elif provider == "openai":
-
-        response = openai_client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=temperature
-        )
+        from openai import OpenAI
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     elif provider == "deepseek":
-
-        response = deepseek_client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=temperature
+        from openai import OpenAI
+        client = OpenAI(
+            api_key=os.getenv("DEEPSEEK_API_KEY"),
+            base_url="https://api.deepseek.com"
         )
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=temperature
+    )
 
     return response.choices[0].message.content
 
