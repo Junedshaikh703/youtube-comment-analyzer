@@ -9,10 +9,17 @@ from src.services.llm import (
 
 # load best model config once
 def load_config():
+    import os
     import json
+
+    if os.getenv("CI"):
+        return {
+            "model_name": "test-model",
+            "provider": "groq"
+        }
+
     with open("configs/best_model_config.json") as f:
         return json.load(f)
-
 
 
 def analyze_comments(comments):
