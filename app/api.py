@@ -15,8 +15,9 @@ templates = Jinja2Templates(directory="app/templates")
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "summary": None, "pairs": None}
+    request,
+    "index.html",
+    {"summary": None, "pairs": None}
     )
 
 
@@ -31,12 +32,13 @@ async def analyze(request: Request, video_url: str = Form(...)):
     summary, pairs = await asyncio.to_thread(analyze_comments, comments)
 
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "summary": summary,
             "pairs": pairs
         }
+    
     )
 
 
