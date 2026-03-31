@@ -1,4 +1,5 @@
 import json
+from logging import config
 
 from src.services.llm import (
     generate_summary,
@@ -7,14 +8,20 @@ from src.services.llm import (
 )
 
 # load best model config once
-with open("configs/best_model_config.json") as f:
-    config = json.load(f)
+def load_config():
+    import json
+    with open("configs/best_model_config.json") as f:
+        return json.load(f)
 
-MODEL = config["model_name"]
-PROVIDER = config["provider"]
 
 
 def analyze_comments(comments):
+
+    config = load_config()
+
+    MODEL = config["model_name"]
+    PROVIDER = config["provider"]
+
 
     # 1️⃣ summary
     summary = generate_summary(
