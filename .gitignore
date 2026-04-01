@@ -7,6 +7,4 @@ __pycache__/
 .vscode/
 .idea/
 *.log
-/best_model_config.json
 venv/
-configs/best_model_config.json
