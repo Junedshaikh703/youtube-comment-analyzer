@@ -1,21 +1,22 @@
 # Base image
-FROM python:3.10
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first (for faster build)
-COPY requirements-prod.txt .
+# Copy requirements first
+COPY requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements-prod.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy only required folders/files
+# Copy project files
 COPY app/ app/
 COPY src/ src/
 COPY configs/ configs/
 
-# Expose port
+# Expose FastAPI port
 EXPOSE 8000
 
 # Run FastAPI app
