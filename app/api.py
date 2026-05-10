@@ -1,59 +1,52 @@
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-import asyncio
+import uuid
 
 from src.inference.inference_service import analyze_comments
-from src.services.youtube_fetcher import extract_video_id, fetch_comments
+from src.services.yt_fetcher import extract_video_id
 
 app = FastAPI()
-
 templates = Jinja2Templates(directory="app/templates")
 
+# 🔥 GLOBAL TASK STORE
+tasks = {}
 
-# 🔹 1. Home Page (GET)
+
+# 🔹 Home Page
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse(
-    request,
-    "index.html",
-    {"summary": None, "pairs": None}
-    )
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
-# 🔹 2. Form Submission (POST - HTML flow)
-@app.post("/", response_class=HTMLResponse)
-async def analyze(request: Request, video_url: str = Form(...)):
+# 🔹 START ANALYSIS
+@app.post("/analyze")
+async def start_analysis(request: Request, background_tasks: BackgroundTasks):
+    data = await request.json()
+    video_url = data["video_url"]
 
     video_id = extract_video_id(video_url)
+    task_id = str(uuid.uuid4())
 
-    # Run blocking work in threads
-    comments = await asyncio.to_thread(fetch_comments, video_id)
-    summary, pairs = await asyncio.to_thread(analyze_comments, comments)
-
-    return templates.TemplateResponse(
-        request,
-        "index.html",
-        {
-            "summary": summary,
-            "pairs": pairs
+    tasks[task_id] = {
+        "status": "processing",
+        "progress": "Starting...",
+        "processed": 0,
+        "total": 0,
+        "counts": {"positive": 0, "negative": 0, "question": 0, "neutral": 0},
+        "partial_summary": None,
+        "result": {
+            "summary": "",
+            "replies": []
         }
-    
-    )
+    }
+
+    background_tasks.add_task(analyze_comments, video_id, task_id, tasks)
+
+    return {"task_id": task_id}
 
 
-# 🔹 3. Pure API Endpoint (JSON - for ML / external use)
-@app.post("/predict")
-async def predict(video_url: str):
-
-    video_id = extract_video_id(video_url)
-
-    comments = await asyncio.to_thread(fetch_comments, video_id)
-    summary, pairs = await asyncio.to_thread(analyze_comments, comments)
-
-    return JSONResponse(
-        content={
-            "summary": summary,
-            "pairs": pairs
-        }
-    )
+# 🔹 STATUS API
+@app.get("/status/{task_id}")
+async def get_status(task_id: str):
+    return tasks.get(task_id, {"error": "Invalid task"})

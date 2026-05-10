@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+# ======================
 # PROMPTS
 # ======================
 
@@ -58,15 +59,36 @@ Comments:
 """
 
 
+# ✅ NEW: JSON instruction for structured mode
+JSON_INSTRUCTION = """
+
+Return ONLY JSON in this format:
+
+{
+  "common_issues": [],
+  "frequent_questions": [],
+  "key_themes": [],
+  "sentiment_counts": {
+    "positive": 0,
+    "negative": 0,
+    "question": 0,
+    "neutral": 0
+  }
+}
+
+Do NOT include any paragraph or explanation.
+"""
+
+
+import time
+
 def call_llm(prompt, model, temperature, provider):
 
-    import os
-
-    # 👉 If running in CI → return dummy
+    # CI mode
     if os.getenv("CI"):
         return "dummy response"
 
-    # 👉 Import only when needed
+    # Initialize client
     if provider == "groq":
         from groq import Groq
         client = Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -82,27 +104,65 @@ def call_llm(prompt, model, temperature, provider):
             base_url="https://api.deepseek.com"
         )
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
+    # 🔥 Retry loop
+    for attempt in range(3):
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature
+            )
 
-    return response.choices[0].message.content
+            output = response.choices[0].message.content
+
+            # 🔥 Handle empty response
+            if not output or not output.strip():
+                print(f"[LLM] Empty response (attempt {attempt+1}) → retrying...")
+                time.sleep(2)
+                continue
+
+            return output
+
+        except Exception as e:
+            print(f"[LLM] ERROR (attempt {attempt+1}):", e)
+            time.sleep(3)
+
+    # 🔥 Final fallback
+    print("[LLM] FAILED after retries")
+    return ""
 
 
-def generate_summary(comments , model , provider, temperature):
+# ======================
+# SUMMARY
+# ======================
+
+def generate_batch_summary(comments, model, provider, temperature, structured=False):
+
+    print("\n[SUMMARY] Generating batch summary...")
+    print(f"[SUMMARY] Comments count: {len(comments)}")
 
     comments_text = "\n".join(comments)
 
     prompt = SUMMARY_PROMPT_TEMPLATE.format(comments=comments_text)
 
+    # ✅ ADD: structured control
+    if structured:
+        prompt += JSON_INSTRUCTION
+
     response = call_llm(prompt, model=model, temperature=temperature, provider=provider)
+    print("[SUMMARY] Raw output preview:", response[:200])
 
     return response
 
 
-def classify_comments_batch(comments , model, provider):
+# ======================
+# CLASSIFICATION
+# ======================
+
+def classify_comments_batch(comments, model, provider):
+
+    print("\n[CLASSIFY] Running classification batch...")
+    print(f"[CLASSIFY] Total comments: {len(comments)}")
 
     formatted_comments = "\n".join(
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
@@ -139,13 +199,38 @@ Comments:
     return labels
 
 
-def generate_replies_batch(comments, model, provider, temperature):
+# ======================
+# REPLIES
+# ======================
+
+def generate_replies_batch(
+    comments,
+    model,
+    provider,
+    temperature,
+    video_context="",
+    global_summary="",
+    use_rag=False
+):
+    print("\n[REPLY] Generating replies...")
+    print(f"[REPLY] Number of comments: {len(comments)}")
 
     formatted_comments = "\n".join(
         [f"{i+1}. {c}" for i, c in enumerate(comments)]
     )
 
     prompt = REPLY_PROMPT_TEMPLATE.format(comments=formatted_comments)
+
+    # ✅ ADD: RAG context control
+    if use_rag:
+        context_block = f"""
+Video Context:
+{video_context}
+
+Audience Summary:
+{global_summary}
+"""
+        prompt = context_block + prompt
 
     response = call_llm(prompt, model=model, temperature=temperature, provider=provider)
 
@@ -160,5 +245,45 @@ def generate_replies_batch(comments, model, provider, temperature):
 
     return replies
 
+def generate_global_summary(batch_insights, model, provider):
 
+    print("\n[GLOBAL SUMMARY] Generating final summary...")
 
+    import json
+
+    insights_text = json.dumps(batch_insights, indent=2)
+
+    prompt = f"""
+    You are analyzing aggregated insights from YouTube comments.
+
+    Write a clear, well-structured summary in 4–5 short sentences.
+
+    Guidelines:
+    - Each sentence should represent ONE key idea:
+    1. Overall sentiment
+    2. Main strengths (praises)
+    3. Key issues or gaps
+    4. Common questions or expectations
+    - Combine similar points into a single insight (do not list multiple similar items)
+    - Focus only on patterns that appear repeatedly
+    - Avoid mixing unrelated ideas in one sentence
+    - Keep sentences concise and easy to read
+    - Do NOT repeat information
+    - Do NOT copy phrases directly from the input
+    - Do NOT include numbers, percentages, or raw data
+    - Do NOT mention JSON or formatting
+
+    The output should feel like a clean human explanation, not a data dump.
+
+    Insights:
+    {insights_text}
+    """
+
+    response = call_llm(
+        prompt,
+        model=model,
+        temperature=0,
+        provider=provider
+    )
+
+    return response

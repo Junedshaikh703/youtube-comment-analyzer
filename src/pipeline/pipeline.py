@@ -22,7 +22,7 @@ REPLY_TEMP = params["llm"]["reply_temperature"]
 
 
 from src.services.llm import (
-    generate_summary,
+    generate_batch_summary,
     classify_comments_batch,
     generate_replies_batch,
     SUMMARY_PROMPT_TEMPLATE,
@@ -89,7 +89,7 @@ def run_pipeline():
             print(f"\nProcessing video: {video_id}")
 
             # SUMMARY
-            summary = generate_summary(comments=comments[:45] , model=MODEL , provider=PROVIDER, temperature=SUMMARY_TEMP)
+            summary = generate_batch_summary(comments=comments , model=MODEL , provider=PROVIDER, temperature=SUMMARY_TEMP , structured=False)
 
 
             cosine_score = compute_summary_similarity(comments, summary)
@@ -135,7 +135,7 @@ def run_pipeline():
 
             # Generate replies in batch
             if target_comments:
-                replies = generate_replies_batch(comments=target_comments, model=MODEL,provider=PROVIDER, temperature=REPLY_TEMP)
+                replies = generate_replies_batch(comments=target_comments, model=MODEL,provider=PROVIDER, temperature=REPLY_TEMP, use_rag=False)
 
                 for comment, reply in zip(target_comments, replies):
 

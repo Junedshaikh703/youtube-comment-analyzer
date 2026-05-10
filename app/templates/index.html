@@ -1,81 +1,109 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-<title>YouTube Comment Analyzer</title>
+<title>YouTube Analyzer</title>
 
 <style>
-body{
+body {
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
-    margin:0;
+    background: #eef2f7;
+    margin: 0;
 }
 
-.container{
-    max-width:700px;
-    margin:60px auto;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0px 10px 30px rgba(0,0,0,0.1);
+.container {
+    max-width: 900px;
+    margin: 40px auto;
 }
 
-h2{
-    text-align:center;
+/* CARD */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
 }
 
-input{
-    width:100%;
-    padding:12px;
-    border-radius:6px;
-    border:1px solid #ccc;
+/* INPUT */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
-button{
-    width:100%;
-    padding:12px;
-    background:#4f46e5;
-    border:none;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:16px;
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg,#6366f1,#4f46e5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-button:hover{
-    background:#4338ca;
+button:hover {
+    opacity: 0.9;
 }
 
-.result{
-    margin-top:30px;
+/* PROGRESS BAR */
+.progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
 }
 
-.summary-box{
-    background:#eef2ff;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:20px;
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #6366f1;
+    transition: width 0.3s ease;
 }
 
-.card{
-    background:#f9fafb;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:15px;
+/* STATS */
+.stats {
+    display: flex;
+    justify-content: space-between;
 }
 
-.loader{
-    display:none;
-    text-align:center;
-    margin-top:20px;
+.stat {
+    text-align: center;
+    flex: 1;
+}
+
+/* SUMMARY */
+#summary {
+    line-height: 1.6;
+}
+
+/* CHAT UI */
+.chat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.comment {
+    background: #e0e7ff;
+    align-self: flex-start;
+}
+
+.reply {
+    background: #f3f4f6;
+    align-self: flex-end;
 }
 
 </style>
-
-<script>
-function showLoader(){
-    document.getElementById("loader").style.display = "block";
-}
-</script>
 
 </head>
 
@@ -83,55 +111,128 @@ function showLoader(){
 
 <div class="container">
 
+<!-- INPUT -->
+
+<div class="card">
 <h2>🎥 YouTube Comment Analyzer</h2>
 
-<form method="POST" onsubmit="showLoader()">
-
-<p>Paste YouTube Video URL</p>
-
-<input type="text" name="video_url" placeholder="Enter YouTube link..." required>
+<input id="url" placeholder="Paste YouTube URL">
 
 <br><br>
 
-<button type="submit">Analyze</button>
+<button onclick="start()">Analyze</button>
 
-</form>
-
-<div id="loader" class="loader">
-<p>⏳ Processing... Please wait</p>
 </div>
 
-{% if summary %}
-
-<div class="result">
-
-<h3>📊 Summary</h3>
-
-<div class="summary-box">
-{{ summary }}
-</div>
-
-<h3>💬 Comments & Replies</h3>
-
-{% for comment, reply in pairs %}
+<!-- PROGRESS -->
 
 <div class="card">
+<h3>⚡ Progress</h3>
 
-<b>Comment:</b>
-<p>{{ comment }}</p>
+<div class="progress-bar">
+<div id="bar" class="progress-fill"></div>
+</div>
 
-<b>Reply:</b>
-<p>{{ reply }}</p>
+<p id="progress">Idle</p>
+</div>
+
+<!-- STATS -->
+
+<div class="card">
+<h3>📊 Sentiment Overview</h3>
+
+<div class="stats">
+<div class="stat">😊<br><span id="pos">0</span></div>
+<div class="stat">😡<br><span id="neg">0</span></div>
+<div class="stat">❓<br><span id="ques">0</span></div>
+<div class="stat">😐<br><span id="neu">0</span></div>
+</div>
+</div>
+
+<!-- SUMMARY -->
+
+<div class="card">
+<h3>🧠 Summary</h3>
+<p id="summary">Waiting for analysis...</p>
+</div>
+
+<!-- CHAT -->
+
+<div class="card">
+<h3>💬 AI Replies</h3>
+<div id="chat" class="chat"></div>
+</div>
 
 </div>
 
-{% endfor %}
+<script>
+let taskId = null;
 
-</div>
+async function start(){
+    const url = document.getElementById("url").value;
 
-{% endif %}
+    document.getElementById("chat").innerHTML = "";
+    document.getElementById("summary").innerText = "Starting...";
 
-</div>
+    const res = await fetch("/analyze", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({video_url:url})
+    });
+
+    const data = await res.json();
+    taskId = data.task_id;
+
+    poll();
+}
+
+async function poll(){
+    const interval = setInterval(async () => {
+
+        const res = await fetch(`/status/${taskId}`);
+        const data = await res.json();
+
+        document.getElementById("progress").innerText = data.progress;
+
+        // progress %
+        if(data.processed && data.total){
+            let percent = (data.processed / data.total) * 100;
+            document.getElementById("bar").style.width = percent + "%";
+        }
+
+        // stats
+        document.getElementById("pos").innerText = data.counts.positive;
+        document.getElementById("neg").innerText = data.counts.negative;
+        document.getElementById("ques").innerText = data.counts.question;
+        document.getElementById("neu").innerText = data.counts.neutral;
+
+        // summary
+        if(data.partial_summary){
+            document.getElementById("summary").innerText = data.partial_summary;
+        }
+
+        if(data.result.summary){
+            document.getElementById("summary").innerText = data.result.summary;
+        }
+
+        // replies (chat style)
+        const chat = document.getElementById("chat");
+        chat.innerHTML = "";
+
+        data.result.replies.forEach(r => {
+            chat.innerHTML += `
+                <div class="message comment">${r[0]}</div>
+                <div class="message reply">${r[1]}</div>
+            `;
+        });
+
+        if(data.status === "completed"){
+            clearInterval(interval);
+        }
+
+    }, 1500);
+}
+</script>
 
 </body>
 </html>
