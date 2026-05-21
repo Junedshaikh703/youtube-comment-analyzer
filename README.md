@@ -72,35 +72,81 @@ Dockerized services with CI/CD workflows for reproducible deployment environment
 
 ```bash
 .
-├── app/                     # FastAPI application layer
-├── configs/                 # Configuration files
+├── .github/workflows/       # CI/CD workflows
+├── app/
+│   ├── templates/           # Frontend templates
+│   └── api.py               # FastAPI API routes
+├── configs/                 # Model and pipeline configurations
 ├── data/
-│   ├── raw/                 # Raw datasets
+│   ├── raw/                 # Raw comment datasets
 │   └── processed/           # Processed datasets
 ├── src/
 │   ├── inference/           # Async inference and RAG workflows
-│   ├── pipeline/            # Data processing and evaluation pipelines
-│   └── services/            # LLM and YouTube services
+│   ├── pipeline/            # Data preprocessing and evaluation pipelines
+│   └── services/            # LLM and YouTube service integrations
 ├── tests/                   # API and workflow tests
-├── .github/workflows/       # CI/CD workflows
 ├── Dockerfile               # Containerization setup
 ├── dvc.yaml                 # DVC pipeline configuration
 ├── params.yaml              # Experiment parameters
-└── requirements.txt         # Project dependencies
-```
+├── requirements.txt         # Project dependencies
+└── main.py                  # Application entry point
+
 
 ---
 
 ## Workflow Pipeline
 
-1. Fetch YouTube comments and metadata
-2. Preprocess and clean comment data
-3. Generate chunked batches for scalable processing
-4. Retrieve contextual information using FAISS-based RAG pipelines
-5. Run asynchronous LLM inference workflows
-6. Evaluate outputs using deterministic evaluation pipelines
-7. Track experiments and model performance using MLflow
-8. Automatically select best-performing workflows
+### 1. Video Input & Task Initialization
+- Extracts and validates YouTube video IDs
+- Initializes asynchronous background inference tasks
+- Creates task states for real-time progress tracking
+
+### 2. Comment Retrieval Pipeline
+- Fetches YouTube comments incrementally using the YouTube Data API
+- Supports pagination-based large-scale retrieval
+- Processes comments progressively for improved responsiveness
+
+### 3. Chunking & Parallel Processing
+- Splits comments into smaller chunks for efficient LLM processing
+- Uses multithreaded workflows for concurrent inference execution
+- Improves scalability, latency, and token efficiency
+
+### 4. Chunk-Level LLM Analysis
+Each chunk independently performs:
+- Sentiment classification
+- Question detection
+- Insight extraction
+- Semantic similarity analysis
+- Reply candidate extraction
+
+Outputs are maintained as structured JSON responses for deterministic aggregation.
+
+### 5. Aggregation Layer
+Chunk-level outputs are progressively combined into:
+- Global sentiment statistics
+- Extracted user questions
+- Semantic engagement insights
+- AI-generated reply queues
+- Final video-level summaries
+
+### 6. Context-Aware Reply Generation
+- Uses retrieval-augmented workflows with LangChain and FAISS
+- Generates context-aware AI replies using semantically relevant transcript retrieval
+
+### 7. Experimentation & Evaluation
+- MLflow-based experiment tracking
+- Prompt versioning workflows
+- Automated best-model selection
+- Deterministic evaluation pipelines
+
+### 8. Real-Time Progress Tracking
+Frontend polling APIs continuously track:
+- Processing progress
+- Sentiment counters
+- Generated replies
+- Inference task states
+
+This enables non-blocking execution and progressive UI rendering.
 
 ---
 
@@ -136,12 +182,11 @@ docker run -p 8000:8000 youtube-comment-analyzer
 
 ## Future Improvements
 
-- Multi-agent moderation workflows
-- Streaming inference pipelines
-- Advanced hybrid retrieval workflows
-- Distributed inference orchestration
-- Real-time dashboard monitoring
-- GPU-optimized deployment pipelines
+- Streaming-based real-time inference pipelines
+- Advanced hybrid retrieval and reranking workflows
+- GPU-optimized inference deployment
+- Distributed task orchestration for large-scale processing
+- Real-time analytics dashboard and monitoring
 
 ---
 
